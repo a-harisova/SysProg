@@ -25,6 +25,7 @@ public:
 	Session(int _id)
 		:id(_id)
 	{
+
 	}
 	
 	void add(Message& m)
