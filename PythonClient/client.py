@@ -5,16 +5,21 @@ import socket, struct, time
 from msg import *
 
 
+@dataclass
 class Client:
     id: int = 0
 
     def Send(self, s, m):
-        m.Header.Send(s)
+        s.send(struct.pack(f'iiii', m.Header.To, m.Header.From, m.Header.Type, m.Header.Size))
         if m.Header.Size > 0:
             s.send(struct.pack(f'{m.Header.Size}s', m.Data.encode('cp866')))
 
     def Receive(self, s, m):
-        m.Header.Receive(s)
+        try:
+            (m.Header.To, m.Header.From, m.Header.Type, m.Header.Size) = struct.unpack('iiii', s.recv(16))
+        except:
+            m.Header.Size = 0
+            m.Header.Type = MT_NODATA
         if m.Header.Size > 0:
             m.Data = struct.unpack(f'{m.Header.Size}s', s.recv(m.Header.Size))[0].decode('cp866')
 
@@ -25,6 +30,7 @@ class Client:
             s.connect((HOST, PORT))
             m = Message(To, self.id, Type, Data)
             self.Send(s, m)
+
     def Call(self, To, Type=MT_DATA, Data=""):
         HOST = 'localhost'
         PORT = 12345

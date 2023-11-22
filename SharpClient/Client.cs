@@ -146,6 +146,7 @@ namespace SharpClient
 		}
 		void MainFunction()
         {
+			Console.OutputEncoding = Encoding.UTF8;
 			Console.WriteLine($"Поздравляем с подключением! Ваш ID: {this.id}");
 			while (true)
 			{
