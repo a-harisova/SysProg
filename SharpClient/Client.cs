@@ -175,6 +175,7 @@ namespace SharpClient
 						break;
 					case 4:
 						send(MessageRecipients.MR_BROKER, MessageTypes.MT_EXIT);
+						System.Environment.Exit(-1);
 						break;
 					default:
 						Console.WriteLine("Ошибка! Попробуйте еще раз!");

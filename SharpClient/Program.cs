@@ -14,7 +14,6 @@ namespace SharpClient
         static void Main(string[] args)
         {
             Client client = new Client();
-            Console.ReadLine();
         }
     }
 }
