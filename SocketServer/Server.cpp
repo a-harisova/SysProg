@@ -5,11 +5,11 @@
 
 int Server::maxID = MR_USER;
 
-void LaunchClient()
+void LaunchClient(LPSTR name)
 {
 	STARTUPINFO si = { sizeof(si) };
 	PROCESS_INFORMATION pi;
-	CreateProcess(NULL, (LPSTR)"SocketClient.exe", NULL, NULL, TRUE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);
+	CreateProcess(NULL, name, NULL, NULL, TRUE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);
 	CloseHandle(pi.hThread);
 	CloseHandle(pi.hProcess);
 }
@@ -66,7 +66,7 @@ void Server::ProcessClient(SOCKET hSock)
 			{
 				if (id != m.header.from)
 				{
-					str.append("Клиент ");
+					str.append("ID = ");
 					str.append(to_string(session->id));
 					str.append("\n");
 				}
@@ -131,12 +131,9 @@ Server::Server()
 
 	CSocket Server;
 	Server.Create(12345);
-
-	for (int i = 0; i < 3; ++i)
-	{
-		LaunchClient();
-		Sleep(100);
-	}
+	
+	LaunchClient("SocketClient.exe");
+	LaunchClient("SharpClient.exe");
 
 	while (true)
 	{
