@@ -45,7 +45,6 @@ namespace SharpClient
 	{
 		public MessageHeader header;
 		public string data;
-		static MessageRecipients clientID;
 
 		public Message(MessageRecipients to, MessageRecipients from, MessageTypes type = MessageTypes.MT_DATA, string data = "")
 		{

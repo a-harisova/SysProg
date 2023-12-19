@@ -112,7 +112,7 @@ namespace SharpClient
 				{
 					case MessageTypes.MT_DATA:
 						Console.WriteLine($"Получено сообщение от клиента: {m.header.from}");
-						Console.WriteLine(m.data); // не робит
+						Console.WriteLine(m.data); 
 						Console.WriteLine("Выберите действие:");
 						break;
 					case MessageTypes.MT_CHECKUSERS:
