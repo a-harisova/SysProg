@@ -164,12 +164,19 @@ namespace SharpClient
 					case 2:
 						Console.WriteLine("Введите ID клиента: ");
 						int ClientID = Convert.ToInt32(Console.ReadLine());
-						Console.WriteLine("Введите сообщение: ");
-						var msg1 = Console.ReadLine();
-						if (msg1 is not null)
-						{
-							send((MessageRecipients)ClientID, MessageTypes.MT_DATA, msg1);
-						}
+						if (ClientID != id)
+                        {
+							Console.WriteLine("Введите сообщение: ");
+							var msg1 = Console.ReadLine();
+							if (msg1 is not null)
+							{
+								send((MessageRecipients)ClientID, MessageTypes.MT_DATA, msg1);
+							}
+                        }
+						else
+                        {
+							Console.WriteLine("Ошибка! Вы ввели свой ID!");
+                        }
 						break;
 					case 3:
 						send(MessageRecipients.MR_BROKER, MessageTypes.MT_CHECKUSERS);

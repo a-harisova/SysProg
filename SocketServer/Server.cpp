@@ -135,13 +135,14 @@ void Server::ProcessClient(SOCKET hSock)
 					if (id != m.header.from && id != MR_STORAGE)
 					{
 						session->add(m);
-						if (StorageSession != sessions.end())
-						{
-							string mes = to_string(m.header.from) + '&' + m.data;
-							Message ms = Message(MR_BROKER, id, MT_DATA, mes);
-							StorageSession->second->add(ms);
-						}
+						
 					}
+				}
+				if (StorageSession != sessions.end())
+				{
+					string mes = to_string(m.header.from) + '&' + m.data;
+					Message ms = Message(MR_BROKER, MR_ALL, MT_DATA, mes);
+					StorageSession->second->add(ms);
 				}
 			}
 			iSessionFrom->second->updateLastInteraction();

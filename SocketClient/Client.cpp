@@ -113,11 +113,16 @@ void Client::MainFunction()
         {
             cout << "Введите ID клиента: ";
             int ClientID = Get_Correct_Number(0, 1000);
-            cout << "Введите сообщение: ";
-            string msg;
-            cin.ignore();
-            getline(cin, msg);
-            send(ClientID, MT_DATA, msg);
+            if (ClientID != id)
+            {
+                cout << "Введите сообщение: ";
+                string msg;
+                cin.ignore();
+                getline(cin, msg);
+                send(ClientID, MT_DATA, msg);
+            }
+            else
+                cout << "Ошибка! Вы ввели свой ID!" << endl;
             break;
         }
         case 3:

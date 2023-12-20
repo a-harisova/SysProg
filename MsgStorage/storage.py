@@ -60,7 +60,7 @@ def ProcessMessages(storage_id):
                 data = json.load(f)
 
             filtered_msg = [message for message in data if
-                                 (message.get('to') == m.Header.From or message.get('to') == "ALL")]
+                                 (message.get('to') == m.Header.From or message.get('to') == 50)]
             text = ''
             for msg in filtered_msg:
                 text += "Получено сообщение от клиента " + msg['from'] + ": " + msg['message'] + "\n"
