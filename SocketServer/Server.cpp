@@ -73,7 +73,7 @@ void Server::ProcessClient(SOCKET hSock)
 		{
 			for (auto& [id, session] : sessions)
 			{
-				if (id != m.header.from)
+				if (id != m.header.from && id != MR_STORAGE)
 				{
 					str.append("ID = ");
 					str.append(to_string(session->id));
@@ -123,7 +123,7 @@ void Server::ProcessClient(SOCKET hSock)
 				iSessionTo->second->add(m);
 				if (StorageSession != sessions.end())
 				{
-					m.data = "{'" + to_string(m.header.from) + "':'" + m.data + "'}";
+					m.data = to_string(m.header.from) + "'&'" + m.data;;
 					Message ms = Message(MR_BROKER, m.header.to, MT_DATA, m.data);
 					StorageSession->second->add(ms);
 				}
@@ -137,7 +137,7 @@ void Server::ProcessClient(SOCKET hSock)
 						session->add(m);
 						if (StorageSession != sessions.end())
 						{
-							string mes = "{'" + to_string(m.header.from) + "':'" + m.data + "'}";
+							string mes = to_string(m.header.from) + "'&'" + m.data;;
 							Message ms = Message(MR_BROKER, id, MT_DATA, mes);
 							StorageSession->second->add(ms);
 						}
@@ -174,6 +174,7 @@ Server::Server()
 {
 	thread clientConnection(&Server::IsActive, this);
 	clientConnection.detach();
+	maxID = MR_USER;
 
 	AfxSocketInit();
 

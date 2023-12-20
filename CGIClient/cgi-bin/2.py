@@ -114,6 +114,7 @@ def main():
 
         PrintHeader()
         PrintForm(user_id)
+        PrintFormClient(user_id)
         PrintFooter()
         return
     else:

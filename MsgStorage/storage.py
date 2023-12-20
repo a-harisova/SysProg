@@ -39,20 +39,18 @@ def ProcessMessages(storage_id):
     while True:
         m = Call(storage_id, MR_BROKER, MT_GETDATA)
         if (m.Header.Type == MT_DATA):
-            print(m.Data)
             data = []
             try:
                 with open('msgs.json', 'r') as f:
                     data = json.load(f)
+                    print(data)
             except:
                 with open('msgs.json', 'w') as f:
                     pass
 
             with open('msgs.json', 'w') as f:
-                print("WHERE IS JSON")
-                print(os.path.abspath('msgs.json'))
-                temp = {m.Header.From: m.Data}
-                data.append(temp)
+                client, msg = m.Data.split('&')
+                data += {'to': m.Header.From, 'from': client, 'message': msg}
                 json.dump(data, f)
                 print(f"New msg added to {m.Header.From}. \n")
 
@@ -60,11 +58,12 @@ def ProcessMessages(storage_id):
             taker = str(m.Header.From)
             with open('msgs.json', 'r') as f:
                 data = json.load(f)
-            for item in data:
-                for key, value in item.items():
-                    if (key == taker):
-                        text += value
-                        text += ","
+
+            filtered_msg = [message for message in data if
+                                 (message.get('to') == m.Header.From or message.get('to') == "ALL")]
+            text = ''
+            for msg in filtered_msg:
+                text += "Получено сообщение от клиента %d: %s \n" % (msg['from'], msg['message'])
             text = text[:-1]
             Call(storage_id, m.Header.From, MT_GETLAST, text)
             print(f"Last msgs sent to {taker}: {text}. \n")
