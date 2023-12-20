@@ -38,9 +38,9 @@ def Call(From, To, Type=MT_DATA, Data=""):
         return m
 
 def Load(user_id):
-    m = Call(user_id, MR_BROKER, MT_GETDATA)
-    if m.Header.Type == MT_DATA:
-        return "Получено сообщение от клиента %d: %s \n" % (m.Header.From, m.Data)
+    ms = Call(user_id, MR_BROKER, MT_GETDATA)
+    if ms.Header.Type == MT_GETLAST and ms.Header.From == MR_BROKER:
+        return "Получено сообщение от клиента: %s \n" % (ms.Data)
     else:
         return ''
 
@@ -130,6 +130,7 @@ def main():
     elif menu == '2':
         PrintHeader()
         data = Load(user_id)
+
         PrintForm(user_id, data)
         PrintFooter()
     else:
