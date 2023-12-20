@@ -41,7 +41,7 @@ def Load(user_id):
     m = Call(user_id, MR_BROKER, MT_GETLAST)
     ms = Call(user_id, MR_BROKER, MT_GETDATA)
     if ms.Header.Type == MT_GETLAST and ms.Header.From == MR_BROKER:
-        return "Получено сообщение от клиента: %s \n" % (ms.Data)
+        return ms.Data
     else:
         return ""
 
@@ -107,7 +107,7 @@ def PrintFooter():
     print("""</body>
         </html>""")
 
-def main(data):
+def main():
     form = cgi.FieldStorage()
     user_id = form.getvalue('hidden_id_field')
     if user_id is None:
@@ -115,7 +115,7 @@ def main(data):
         user_id = m.Header.To
 
         PrintHeader()
-        PrintForm(user_id, data)
+        PrintForm(user_id)
         PrintFooter()
         return
     else:
@@ -138,8 +138,7 @@ def main(data):
         PrintFooter()
     elif menu == '3':
         PrintHeader()
-        data = data + Load(user_id)
-        PrintForm(user_id, data)
+        PrintForm(user_id, Load(user_id))
         PrintFooter()
     else:
         PrintHeader()
@@ -147,5 +146,4 @@ def main(data):
         PrintFooter()
         print('ОШИБКА! Выберите действие!<br>')
 
-data = ''
-main(data)
+main()
