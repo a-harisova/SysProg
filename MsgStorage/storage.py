@@ -51,7 +51,6 @@ def ProcessMessages(storage_id):
             with open('msgs.json', 'w') as f:
                 client, msg = m.Data.split('&')
                 data.append({'to': m.Header.From, 'from': client, 'message': msg})
-                print(data)
                 json.dump(data, f)
                 print(f"New msg added to {m.Header.From}. \n")
 
@@ -60,7 +59,8 @@ def ProcessMessages(storage_id):
                 data = json.load(f)
 
             filtered_msg = [message for message in data if
-                                 (message.get('to') == m.Header.From or message.get('to') == 50)]
+                                 ((message.get('to') == m.Header.From) or (message.get('to') == 50 and message.get('from') != m.Header.From))]
+            print(filtered_msg)
             text = ''
             for msg in filtered_msg:
                 text += "Получено сообщение от клиента " + msg['from'] + ": " + msg['message'] + "\n"

@@ -36,13 +36,18 @@ def Call(From, To, Type=MT_DATA, Data=""):
         Receive(s, m)
         return m
 
-def Load(user_id):
-    SendMsg(user_id, MR_BROKER, MT_GETLAST)
+def GetMsg(user_id):
     ms = Call(user_id, MR_BROKER, MT_GETDATA)
     if ms.Header.Type == MT_GETLAST and ms.Header.From == MR_BROKER:
         return ms.Data
     else:
-        return ''
+        return GetMsg(user_id)
+
+def PrintMsg(user_id):
+    SendMsg(user_id, MR_BROKER, MT_GETLAST)
+    PrintHeader()
+    PrintForm(user_id, GetMsg(user_id))
+    PrintFooter()
 
 def main():
     form = cgi.FieldStorage()
@@ -50,10 +55,7 @@ def main():
     if user_id is None:
         m = Call(MR_BROKER, 0,  MT_INIT)
         user_id = m.Header.To
-
-        PrintHeader()
-        PrintForm(user_id)
-        PrintFooter()
+        PrintMsg(user_id)
         return
     else:
         user_id = int(user_id)
@@ -64,26 +66,16 @@ def main():
         msg = form.getvalue('getmessage')
         if msg is not None and to_id is not None and user_id is not None:
             SendMsg(user_id, int(to_id), MT_DATA, msg)
-
-        PrintHeader()
-        PrintForm(user_id)
-        PrintFooter()
+        PrintMsg(user_id)
     elif menu == '2':
         msg = form.getvalue('getmessage')
         if msg is not None and user_id is not None:
             SendMsg(user_id, MR_ALL, MT_DATA, msg)
-
-        PrintHeader()
-        PrintForm(user_id)
-        PrintFooter()
+        PrintMsg(user_id)
     elif menu == '3':
-        PrintHeader()
-        PrintForm(user_id, Load(user_id))
-        PrintFooter()
+        PrintMsg(user_id)
     else:
-        PrintHeader()
-        PrintForm(user_id)
-        PrintFooter()
+        PrintMsg(user_id)
         print('ОШИБКА! Выберите действие!<br>')
 
 main()

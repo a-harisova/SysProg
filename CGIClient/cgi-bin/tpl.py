@@ -1,5 +1,14 @@
-import cgi, pickle, cgitb, codecs, sys, datetime, os, html
+import os
+import cgi
+import cgitb
+import codecs
+import re
+import socket
+import sys
+
 selfurl = os.environ['SCRIPT_NAME']
+
+
 def PrintHeader():
     print("Content-type: text/html\n")
     print("""<!DOCTYPE html>
@@ -30,7 +39,8 @@ def PrintHeader():
               <main class="container mt-5">
                 <div class="col-12 col-sm-10 col-lg-6 offset-lg-3 offset-sm-1">""")
 
-def PrintForm(user_id, data = ''):
+
+def PrintForm(user_id, data=''):
     print(f"""<form class="card mb-5" id="messageForm" action="{selfurl}" method="post">
                 <div class="card-body text-center pt-2">
                   <h2 class="h4 card-title">{user_id} </h2>
@@ -57,6 +67,7 @@ def PrintForm(user_id, data = ''):
               </form>
             </div>
           </main>""")
+
 
 def PrintFooter():
     print("""</body>
