@@ -52,21 +52,21 @@ def ProcessMessages(storage_id):
                 client, msg = m.Data.split('&')
                 data.append({'to': m.Header.From, 'from': client, 'message': msg})
                 json.dump(data, f)
-                print(f"New msg added to {m.Header.From}. \n")
+                print(f"Новое сообщение клиенту {m.Header.From}. \n")
 
         if (m.Header.Type == MT_GETLAST):
             with open('msgs.json', 'r') as f:
                 data = json.load(f)
 
             filtered_msg = [message for message in data if
-                                 ((message.get('to') == m.Header.From) or (message.get('to') == 50 and message.get('from') != m.Header.From))]
-            print(filtered_msg)
+                            (message.get('to') == m.Header.From) or (
+                                        message.get('to') == 50 and int(message.get('from')) != m.Header.From)]
             text = ''
             for msg in filtered_msg:
-                text += "Получено сообщение от клиента " + msg['from'] + ": " + msg['message'] + "\n"
+                text += "Сообщение от клиента " + msg['from'] + ": " + msg['message'] + "\n"
             text = text[:-1]
             Call(storage_id, m.Header.From, MT_GETLAST, text)
-            print(f"Last msgs sent to {m.Header.From}: {text}. \n")
+            print(f"Список собщений отправлены клиенту {m.Header.From}:\n{text}")
         else:
             time.sleep(1)
 
